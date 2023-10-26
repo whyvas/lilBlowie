@@ -1,154 +1,137 @@
 //Lil' Blowie an ESP8266, 8 bank, wifi fireworks launcher.
+
 #include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ESP8266WebServer.h>
 
-const char* ssid = "yourssid";
-const char* password = "yourpassword";
+#ifndef APSSID
+#define APSSID "lilBlowie"
+#define APPSK "boombitch"
+#endif
 
-WiFiServer server(80);
+#define PIN1 5
+#define PIN2 4
+#define PIN3 0
+#define PIN4 16
+#define PIN5 14
+#define PIN6 12
+#define PIN7 13
+#define PIN8 15
+
+/* Set these to your desired credentials. */
+const char *ssid = APSSID;
+const char *password = APPSK;
+
+ESP8266WebServer server(80);
+
+/* Just a little test message.  Go to http://192.168.4.1 in a web browser
+   connected to this access point to see it.
+*/
+void handleRoot() {
+  sendPage();
+}
+void handleFire1() {
+  Serial.print("Firing 1");
+  digitalWrite(PIN1, LOW);
+  delay(1000);
+  digitalWrite(PIN1, HIGH);
+  sendPage();
+}
+void handleFire2() {
+  Serial.print("Firing 2");
+  digitalWrite(PIN2, LOW);
+  delay(1000);
+  digitalWrite(PIN2, HIGH);
+  sendPage();
+}
+void handleFire3() {
+  Serial.print("Firing 3");
+  digitalWrite(PIN3, LOW);
+  delay(1000);
+  digitalWrite(PIN3, HIGH);
+  sendPage();
+}
+void handleFire4() {
+  Serial.print("Firing 4");
+  digitalWrite(PIN4, LOW);
+  delay(1000);
+  digitalWrite(PIN4, HIGH);
+  sendPage();
+}
+void handleFire5() {
+  Serial.print("Firing 5");
+  digitalWrite(PIN5, LOW);
+  delay(1000);
+  digitalWrite(PIN5, HIGH);
+  sendPage();
+}
+void handleFire6() {
+  Serial.print("Firing 6");
+  digitalWrite(PIN6, LOW);
+  delay(1000);
+  digitalWrite(PIN6, HIGH);
+  sendPage();
+}
+void handleFire7() {
+  Serial.print("Firing 7");
+  digitalWrite(PIN7, LOW);
+  delay(1000);
+  digitalWrite(PIN7, HIGH);
+  sendPage();
+}
+void handleFire8() {
+  Serial.print("Firing 8");
+  digitalWrite(PIN8, LOW);
+  delay(1000);
+  digitalWrite(PIN8, HIGH);
+  sendPage();
+}
+
+void sendPage() {
+  server.send(200, "text/html", "<body style=\"background-color:red\"><br><br><center><font face=\"helvetica\"><a style=\"font-size:90px\"><b>Lil\' Blowie &trade;</b><br></a></font><button style=\"height:160px;width:400px\" type=\"button\" onclick=\'parent.location=\"/1\"\'><a style=\"font-size:60px\">Bank 1 FIRE!</a></button><br><button style=\"height:160px;width:400px\" type=\"button\" onclick=\'parent.location=\"/2\"\'><a style=\"font-size:60px\">Bank 2 FIRE!</a></button><br><button style=\"height:160px;width:400px\" type=\"button\" onclick=\'parent.location=\"/3\"\'><a style=\"font-size:60px\">Bank 3 FIRE!</a></button><br><button style=\"height:160px;width:400px\" type=\"button\" onclick=\'parent.location=\"/4\"\'><a style=\"font-size:60px\">Bank 4 FIRE!</a></button><br><button style=\"height:160px;width:400px\" type=\"button\" onclick=\'parent.location=\"/5\"\'><a style=\"font-size:60px\">Bank 5 FIRE!</a></button><br><button style=\"height:160px;width:400px\" type=\"button\" onclick=\'parent.location=\"/6\"\'><a style=\"font-size:60px\">Bank 6 FIRE!</a></button><br><button style=\"height:160px;width:400px\" type=\"button\" onclick=\'parent.location=\"/7\"\'><a style=\"font-size:60px\">Bank 7 FIRE!</a></button><br><button style=\"height:160px;width:400px\" type=\"button\" onclick=\'parent.location=\"/8\"\'><a style=\"font-size:60px\">Bank 8 FIRE!</a></button><br></center></body>");
+}
 
 void setup() {
-Serial.begin(115200);
-delay(1);
-pinMode(5, OUTPUT);
-pinMode(4, OUTPUT);
-pinMode(0, OUTPUT);
-pinMode(2, OUTPUT);
-pinMode(14, OUTPUT);
-pinMode(12, OUTPUT);
-pinMode(13, OUTPUT);
-pinMode(15, OUTPUT);
+  delay(1000);
+  Serial.begin(115200);
+  pinMode(PIN1, OUTPUT);
+  pinMode(PIN2, OUTPUT);
+  pinMode(PIN3, OUTPUT);
+  pinMode(PIN4, OUTPUT);
+  pinMode(PIN5, OUTPUT);
+  pinMode(PIN6, OUTPUT);
+  pinMode(PIN7, OUTPUT);
+  pinMode(PIN8, OUTPUT);
 
-digitalWrite(5, HIGH);
-digitalWrite(4, HIGH);
-digitalWrite(0, HIGH);
-digitalWrite(2, HIGH);
-digitalWrite(14, HIGH);
-digitalWrite(12, HIGH);
-digitalWrite(13, HIGH);
-digitalWrite(15, HIGH);
+  digitalWrite(PIN1, HIGH);
+  digitalWrite(PIN2, HIGH);
+  digitalWrite(PIN3, HIGH);
+  digitalWrite(PIN4, HIGH);
+  digitalWrite(PIN5, HIGH);
+  digitalWrite(PIN6, HIGH);
+  digitalWrite(PIN7, HIGH);
+  digitalWrite(PIN8, HIGH);
+  Serial.println();
+  Serial.print("Configuring access point...");
+  /* You can remove the password parameter if you want the AP to be open. */
+  WiFi.softAP(ssid, password);
 
-// Connect to WiFi network
-Serial.println();
-Serial.println();
-Serial.print("Connecting to ");
-Serial.println(ssid);
-
-WiFi.begin(ssid, password);
-
-while (WiFi.status() != WL_CONNECTED) {
-delay(500);
-Serial.print(".");
-}
-Serial.println("");
-Serial.println("WiFi connected");
-
-// Start the server
-server.begin();
-Serial.println("Server started");
-
-// Print the IP address
-Serial.print("Use this URL to connect: ");
-Serial.print("http://");
-Serial.print(WiFi.localIP());
-Serial.println("/");
+  IPAddress myIP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(myIP);
+  server.on("/", handleRoot);
+  server.on("/1", handleFire1);
+  server.on("/2", handleFire2);
+  server.on("/3", handleFire3);
+  server.on("/4", handleFire4);
+  server.on("/5", handleFire5);
+  server.on("/6", handleFire6);
+  server.on("/7", handleFire7);
+  server.on("/8", handleFire8);
+  server.begin();
+  Serial.println("HTTP server started");
 }
 
 void loop() {
-// Check if a client has connected
-WiFiClient client = server.available();
-if (!client) {
-return;
-}
-
-// Wait until the client sends some data
-Serial.println("new client");
-while(!client.available()){
-delay(10);
-}
-
-// Read the first line of the request
-String request = client.readStringUntil('\r');
-Serial.println(request);
-client.flush();
-
-// Fire Ze fucking missiles!
-if (request.indexOf("/LB=1") != -1) {
-Serial.print("Firing 1");
-digitalWrite(5, LOW);
-delay(1000);
-digitalWrite(5, HIGH);
-}
-
-if (request.indexOf("/LB=2") != -1) {
-Serial.print("Firing 2");
-digitalWrite(4, LOW);
-delay(1000);
-digitalWrite(4, HIGH);
-}
-
-if (request.indexOf("/LB=3") != -1) {
-Serial.print("Firing 3");
-digitalWrite(0, LOW);
-delay(1000);
-digitalWrite(0, HIGH);
-}
-if (request.indexOf("/LB=4") != -1) {
-Serial.print("Firing 4");
-digitalWrite(2, LOW);
-delay(1000);
-digitalWrite(2, HIGH);
-}
-if (request.indexOf("/LB=5") != -1) {
-Serial.print("Firing 5");
-digitalWrite(14, LOW);
-delay(1000);
-digitalWrite(14, HIGH);
-}
-if (request.indexOf("/LB=6") != -1) {
-Serial.print("Firing 6");
-digitalWrite(12, LOW);
-delay(1000);
-digitalWrite(12, HIGH);
-}
-if (request.indexOf("/LB=7") != -1) {
-Serial.print("Firing 7");
-digitalWrite(13, LOW);
-delay(1000);
-digitalWrite(13, HIGH);
-}
-if (request.indexOf("/LB=8") != -1) {
-Serial.print("Firing 8");
-digitalWrite(15, LOW);
-delay(1000);
-digitalWrite(15, HIGH);
-}
-
-
-
-// Return the response
-client.println("HTTP/1.1 200 OK");
-client.println("Content-Type: text/html");
-client.println(""); // do not forget this one
-client.println("<!DOCTYPE HTML>");
-client.println("<html>");
-client.println("<body style=\"background-color:red;\">");
-client.println("<br><br>");
-
-client.println("<center><font face=\"helvetica\"><a style=\"font-size:90px\"><b>Lil' Blowie &trade;</b><br></font></a>");
-client.println("<button style=\"height:160px;width:400px\" type=\"button\" onClick=\"parent.location='/LB=1'\"><a style=\"font-size:60px\">Bank 1 FIRE!</a></button><br>");
-client.println("<button style=\"height:160px;width:400px\" type=\"button\" onClick=\"parent.location='/LB=2'\"><a style=\"font-size:60px\">Bank 2 FIRE!</a></button><br>");
-client.println("<button style=\"height:160px;width:400px\" type=\"button\" onClick=\"parent.location='/LB=3'\"><a style=\"font-size:60px\">Bank 3 FIRE!</a></button><br>");
-client.println("<button style=\"height:160px;width:400px\" type=\"button\" onClick=\"parent.location='/LB=4'\"><a style=\"font-size:60px\">Bank 4 FIRE!</a></button><br>");
-client.println("<button style=\"height:160px;width:400px\" type=\"button\" onClick=\"parent.location='/LB=5'\"><a style=\"font-size:60px\">Bank 5 FIRE!</a></button><br>");
-client.println("<button style=\"height:160px;width:400px\" type=\"button\" onClick=\"parent.location='/LB=6'\"><a style=\"font-size:60px\">Bank 6 FIRE!</a></button><br>");
-client.println("<button style=\"height:160px;width:400px\" type=\"button\" onClick=\"parent.location='/LB=7'\"><a style=\"font-size:60px\">Bank 7 FIRE!</a></button><br>");
-client.println("<button style=\"height:160px;width:400px\" type=\"button\" onClick=\"parent.location='/LB=8'\"><a style=\"font-size:60px\">Bank 8 FIRE!</a></button><br></center>");
-client.println("");
-client.println("</body>");
-client.println("</html>");
-
-delay(10);
-Serial.println("Client disonnected");
-Serial.println("");
-
+  server.handleClient();
 }
