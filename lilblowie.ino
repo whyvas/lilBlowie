@@ -1,4 +1,4 @@
-//Lil' Blowie an ESP8266, 8 bank, wifi fireworks launcher.
+//lilBlowie tm
 
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
@@ -11,12 +11,12 @@
 
 #define PIN1 5
 #define PIN2 4
-#define PIN3 0
+#define PIN3 3
 #define PIN4 16
 #define PIN5 14
 #define PIN6 12
 #define PIN7 13
-#define PIN8 15
+#define PIN8 10
 
 /* Set these to your desired credentials. */
 const char *ssid = APSSID;
@@ -24,63 +24,61 @@ const char *password = APPSK;
 
 ESP8266WebServer server(80);
 
-/* Just a little test message.  Go to http://192.168.4.1 in a web browser
-   connected to this access point to see it.
-*/
+
 void handleRoot() {
   sendPage();
 }
 void handleFire1() {
-  Serial.print("Firing 1");
+  Serial.print("Firing 1\n");
   digitalWrite(PIN1, LOW);
   delay(1000);
   digitalWrite(PIN1, HIGH);
   sendPage();
 }
 void handleFire2() {
-  Serial.print("Firing 2");
+  Serial.print("Firing 2\n");
   digitalWrite(PIN2, LOW);
   delay(1000);
   digitalWrite(PIN2, HIGH);
   sendPage();
 }
 void handleFire3() {
-  Serial.print("Firing 3");
+  Serial.print("Firing 3\n");
   digitalWrite(PIN3, LOW);
   delay(1000);
   digitalWrite(PIN3, HIGH);
   sendPage();
 }
 void handleFire4() {
-  Serial.print("Firing 4");
+  Serial.print("Firing 4\n");
   digitalWrite(PIN4, LOW);
   delay(1000);
   digitalWrite(PIN4, HIGH);
   sendPage();
 }
 void handleFire5() {
-  Serial.print("Firing 5");
+  Serial.print("Firing 5\n");
   digitalWrite(PIN5, LOW);
   delay(1000);
   digitalWrite(PIN5, HIGH);
   sendPage();
 }
 void handleFire6() {
-  Serial.print("Firing 6");
+  Serial.print("Firing 6\n");
   digitalWrite(PIN6, LOW);
   delay(1000);
   digitalWrite(PIN6, HIGH);
   sendPage();
 }
 void handleFire7() {
-  Serial.print("Firing 7");
+  Serial.print("Firing 7\n");
   digitalWrite(PIN7, LOW);
   delay(1000);
   digitalWrite(PIN7, HIGH);
   sendPage();
 }
 void handleFire8() {
-  Serial.print("Firing 8");
+  Serial.print("Firing 8\n");
   digitalWrite(PIN8, LOW);
   delay(1000);
   digitalWrite(PIN8, HIGH);
